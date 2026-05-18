@@ -68,14 +68,14 @@ if st.sidebar.button("🔍 查詢", type="primary"):
                     df["date"] = pd.to_datetime(df["date"])
                     df = df.sort_values("date").reset_index(drop=True)
 
-                    # Rename columns for Plotly
-                    df.rename(columns={
-                        "open":           "Open",
-                        "max":            "High",
-                        "min":            "Low",
-                        "close":          "Close",
-                        "Trading_Volume": "Volume",
-                    }, inplace=True)
+                    # Rename columns for Plotly (handles both API and cached data)
+                    col_map = {
+                        "open": "Open", "max": "High", "high": "High",
+                        "min": "Low", "low": "Low",
+                        "close": "Close",
+                        "Trading_Volume": "Volume", "volume": "Volume",
+                    }
+                    df.rename(columns={k: v for k, v in col_map.items() if k in df.columns}, inplace=True)
 
                     # ── Candlestick + Volume chart ──
                     fig = make_subplots(
