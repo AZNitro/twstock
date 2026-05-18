@@ -1,0 +1,12 @@
+services:
+  twstock-kline:
+    build: .
+    ports:
+      - "8501:8501"   # Streamlit UI
+      - "8000:8000"   # FastAPI
+    environment:
+      - FINMIND_TOKEN=${FINMIND_TOKEN}
+      - API_BASE=http://localhost:8000
+    volumes:
+      - ./data:/app/data   # SQLite cache 持久化
+    restart: unless-stopped
